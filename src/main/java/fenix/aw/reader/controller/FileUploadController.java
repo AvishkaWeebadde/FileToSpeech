@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.stream.Collectors;
 
 @RestController
-public class FileUploadController {
+public class FileUploadController implements IFileUploadController{
 
     private final IStorageService storageService;
 
@@ -29,9 +29,17 @@ public class FileUploadController {
     public String listUploadedFiles(Model model)
     {
         model.addAttribute("files", storageService.loadAll().map(
-                        path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                                "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
+                        path -> MvcUriComponentsBuilder.fromMethodName(
+                                FileUploadController.class,
+                                "serveFile",
+                                path.getFileName().toString()
+                                )
+                                .build()
+                                .toUri()
+                                .toString()
+                )
+                .collect(Collectors.toList())
+        );
 
         return "uploadForm";
     }
