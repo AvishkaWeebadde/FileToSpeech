@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,22 +27,18 @@ public class FileUploadController implements IFileUploadController{
     }
 
     @GetMapping("/")
-    public String listUploadedFiles(Model model)
-    {
-        model.addAttribute("files", storageService.loadAll().map(
-                        path -> MvcUriComponentsBuilder.fromMethodName(
+    public ResponseEntity<List<String>> listUploadedFiles() {
+        List<String> fileUris = storageService.loadAll()
+                .map(path -> MvcUriComponentsBuilder.fromMethodName(
                                 FileUploadController.class,
                                 "serveFile",
-                                path.getFileName().toString()
-                                )
-                                .build()
-                                .toUri()
-                                .toString()
-                )
-                .collect(Collectors.toList())
-        );
+                                path.getFileName().toString())
+                        .build()
+                        .toUri()
+                        .toString())
+                .collect(Collectors.toList());
 
-        return "uploadForm";
+        return ResponseEntity.ok(fileUris);
     }
 
     @GetMapping("/files/{filename:.+}")
