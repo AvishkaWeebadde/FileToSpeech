@@ -6,6 +6,7 @@ import fenix.aw.reader.service.impl.TTSClientService;
 import fenix.aw.reader.util.PDFProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,15 +96,36 @@ public class FileUploadController implements IFileUploadController{
                 return ResponseEntity.badRequest().body("No text found in the PDF.");
             }
 
-            ttsClientService.sendTextToTTS(extractedText);
-
-            return ResponseEntity.ok("TTS generation request sent succesfully for: " + fileName);
+            return ResponseEntity.ok("TTS generation request sent succesfully for: " + ttsClientService.generateAudio(extractedText));
 
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
             return ResponseEntity.status(500).body("Error processing file for TTS.");
+        }
+    }
+
+    @GetMapping("/audiobooks/{filename}")
+    public ResponseEntity<Resource> getAudiobook(@PathVariable String filename)
+    {
+        try
+        {
+            Path filePath = Paths.get("audio_files").resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists())
+            {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        }
+        catch (Exception ex)
+        {
+            return ResponseEntity.internalServerError().build();
         }
     }
 

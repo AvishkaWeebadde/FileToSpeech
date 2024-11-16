@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class TTSClientService
@@ -31,6 +32,27 @@ public class TTSClientService
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    public String generateAudio(String text)
+    {
+        try
+        {
+            Map<String, String> request = new HashMap<>();
+            request.put("text", text);
+
+            ResponseEntity<Map> response = restTemplate.postForEntity(
+                    pythonTTSUrl,
+                    request,
+                    Map.class
+            );
+            return (String) Objects.requireNonNull(response.getBody()).get("file_path");
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return "Error";
         }
     }
 }

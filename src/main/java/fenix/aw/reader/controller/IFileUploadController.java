@@ -15,4 +15,5 @@ public interface IFileUploadController {
     ResponseEntity<Resource> serveFile(@PathVariable String filename);
     String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes);
     ResponseEntity<String> processFileForTTS(@RequestParam("fileName") String fileName);
+    ResponseEntity<Resource> getAudiobook(@PathVariable String filename);
 }
