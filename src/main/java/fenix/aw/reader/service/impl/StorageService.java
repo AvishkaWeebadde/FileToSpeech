@@ -2,7 +2,7 @@ package fenix.aw.reader.service.impl;
 
 import fenix.aw.reader.Exception.StorageException;
 import fenix.aw.reader.Exception.StorageFileNotFoundException;
-import fenix.aw.reader.StorageProperties;
+import fenix.aw.reader.util.StorageProperties;
 import fenix.aw.reader.service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
