@@ -14,4 +14,5 @@ public interface IFileUploadController {
     ResponseEntity<List<String>> listUploadedFiles();
     ResponseEntity<Resource> serveFile(@PathVariable String filename);
     String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes);
+    ResponseEntity<String> processFileForTTS(@RequestParam("fileName") String fileName);
 }
