@@ -88,16 +88,21 @@ public class FileUploadController implements IFileUploadController{
                 return ResponseEntity.badRequest().body("File not found " + fileName);
             }
 
-            // Extract text from the pdf
-            String extractedText = PDFProcessor.extractTextFromPDF(fileResource.getFile().getAbsolutePath());
 
-            if(extractedText == null || extractedText.isEmpty())
+            // Process the file for TTS
+            List<String> audioPaths = ttsClientService.processFileForTTS
+                    (
+                            fileResource.getFile().getAbsolutePath()
+                    );
+
+            if (audioPaths.isEmpty())
             {
-                return ResponseEntity.badRequest().body("No text found in the PDF.");
+                return ResponseEntity.badRequest().body("Failed to generate audio files.");
             }
 
-            return ResponseEntity.ok("TTS generation request sent succesfully for: " + ttsClientService.generateAudio(extractedText));
+            String combinedFilePath = ttsClientService.combineAudioFiles(audioPaths);
 
+            return ResponseEntity.ok("Audio files combined successfully. Path: " + combinedFilePath);
         }
         catch (Exception ex)
         {
