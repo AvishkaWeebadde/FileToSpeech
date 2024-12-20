@@ -10,4 +10,4 @@ A backend service for uploading, storing, and processing PDF files, with the add
 - **Swagger UI**: Explore and test API endpoints with an interactive Swagger interface.
 - **Dockerized Deployment**: Run the service in a containerized environment for quick setup and scalability.
 
-currently, the audio file generation takes a long time. Enhancement is underway to send in chunks instead of whole pdf text
+Addeed small improvements to parallel processing and cut down the processing time from 30 mins to about 13 seconds. Needs improvement
