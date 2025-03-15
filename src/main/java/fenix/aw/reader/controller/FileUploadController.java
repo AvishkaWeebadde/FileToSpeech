@@ -100,7 +100,7 @@ public class FileUploadController implements IFileUploadController{
                 return ResponseEntity.badRequest().body("Failed to generate audio files.");
             }
 
-            String combinedFilePath = ttsClientService.combineAudioFiles(audioPaths);
+            String combinedFilePath = ttsClientService.combineAudioFiles(audioPaths, fileName);
 
             return ResponseEntity.ok("Audio files combined successfully. Path: " + combinedFilePath);
         }

@@ -138,17 +138,17 @@ public class TTSClientService
         }
     }
 
-    public String combineAudioFiles(List<String> filePaths) {
+    public String combineAudioFiles(List<String> filePaths, String fileName) {
         Map<String, Object> request = new HashMap<>();
         request.put("file_paths", filePaths);
+        request.put("file_name", fileName);
 
         try
         {
             ResponseEntity<Map> response = restTemplate.postForEntity(pythonCombineUrl, request, Map.class);
             if (response.getStatusCode().is2xxSuccessful())
             {
-                String combinedFilePath = (String) response.getBody().get("file_path");
-                return combinedFilePath;
+                return (String) response.getBody().get("file_path");
             }
             else
             {
