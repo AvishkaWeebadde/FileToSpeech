@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: aw.reader
+
+  # Database Configuration
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:qwer123}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        # Removed dialect - auto-detected
+        format_sql: true
+    hibernate:
+      ddl-auto: ${DB_DDL_AUTO:update}
+    show-sql: ${DB_SHOW_SQL:false}
+    open-in-view: false  # FIX: Disable warning
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:50MB}
+      max-request-size: ${MAX_REQUEST_SIZE:50MB}
+
+  # Thymeleaf Configuration
+  thymeleaf:
+    check-template-location: false  # FIX: Disable template warning
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    fenix.aw.reader: ${APP_LOG_LEVEL:INFO}
+    org.springframework.web: WARN
+    org.hibernate: WARN
+
+# Server Configuration
+server:
+  error:
+    include-message: always
+  port: ${SERVER_PORT:8080}
+
+# Storage Configuration
+storage:
+  location: ${STORAGE_LOCATION:../shared_data/upload_dir}
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /api-docs
+
+# Python TTS Service Configuration
+python:
+  tts:
+    url: ${PYTHON_TTS_URL:http://localhost:5000/tts}
+  combine:
+    url: ${PYTHON_COMBINE_URL:http://localhost:5000/combine}
+
+# TTS Processing Configuration
+tts:
+  thread:
+    pool:
+      size: ${TTS_THREAD_POOL_SIZE:10}
+  batch:
+    size: ${TTS_BATCH_SIZE:5}
+  rate:
+    limit: ${TTS_RATE_LIMIT:5.0}
+
+# PDF Configuration
+pdf:
+  chunk:
+    size: ${PDF_CHUNK_SIZE:1000}
+
+# Audio File Configuration
+audio:
+  temp:
+    dir: ${AUDIO_TEMP_DIR:../shared_data/audio_files2}
+  output:
+    dir: ${AUDIO_OUTPUT_DIR:../shared_data/combined_audio}
+  retention:
+    days: ${AUDIO_RETENTION_DAYS:7}
